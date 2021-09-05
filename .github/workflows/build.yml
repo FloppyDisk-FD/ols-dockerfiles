@@ -7,6 +7,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        ols_version: [1.7.13, 1.6.21]
+        php_version: [lsphp74, lsphp73, lsphp72]
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,23 +25,7 @@ jobs:
 
       - name: Build Images
         env:
-          OLS_VERSION: 1.6.19
-          OLS_VERSION2: 1.7.8
-          OLS_VERSION3: 1.7.9
-          OLS_VERSION4: 1.6.20
-          PHP_VERSION: lsphp73
-          PHP_VERSION2: lsphp74
-          PHP_VERSION3: lsphp72
+          OLS_VERSION: ${{ matrix.ols_version }}
+          PHP_VERSION: ${{ matrix.php_version }}
         run: |
-          cd template && ./build.sh --ols $OLS_VERSION --php $PHP_VERSION && \
-          ./build.sh --ols $OLS_VERSION --php $PHP_VERSION2 && \
-          ./build.sh --ols $OLS_VERSION --php $PHP_VERSION3 && \
-          ./build.sh --ols $OLS_VERSION2 --php $PHP_VERSION && \
-          ./build.sh --ols $OLS_VERSION2 --php $PHP_VERSION2 && \
-          ./build.sh --ols $OLS_VERSION2 --php $PHP_VERSION3 && \
-          ./build.sh --ols $OLS_VERSION3 --php $PHP_VERSION && \
-          ./build.sh --ols $OLS_VERSION3 --php $PHP_VERSION2 && \
-          ./build.sh --ols $OLS_VERSION3 --php $PHP_VERSION3 && \
-          ./build.sh --ols $OLS_VERSION4 --php $PHP_VERSION && \
-          ./build.sh --ols $OLS_VERSION4 --php $PHP_VERSION2 && \
-          ./build.sh --ols $OLS_VERSION4 --php $PHP_VERSION3
+          cd template && ./build.sh --ols $OLS_VERSION --php $PHP_VERSION
